@@ -1,0 +1,96 @@
+Практическое задание по теме “Управление БД” Урок 2:
+
+1. Установите СУБД MySQL. Создайте в домашней директории файл .my.cnf, задав в нем логин и пароль, который указывался при установке:
+[client]
+user=root
+password=
+
+2. Создайте базу данных example, разместите в ней таблицу users, состоящую из двух столбцов, числового id и строкового name:
+
+mysql> CREATE DATABASE  example;
+Query OK, 1 row affected (0.10 sec)
+
+mysql> use example
+Database changed
+
+mysql> CREATE TABLE users (id INT(8), name VARCHAR(255));
+Query OK, 0 rows affected, 1 warning (0.24 sec)
+
+mysql> DESCRIBE users;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| id    | int          | YES  |     | NULL    |       |
+| name  | varchar(255) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.06 sec)
+
+mysql> SHOW TABLES
+    -> ;
++-------------------+
+| Tables_in_example |
++-------------------+
+| users             |
++-------------------+
+1 row in set (0.02 sec)
+
+3. Создайте дамп базы данных example из предыдущего задания, разверните содержимое дампа в новую базу данных sample:
+
+C:\Users\Ксения>mysqldump example
+-- MySQL dump 10.13  Distrib 8.0.23, for Win64 (x86_64)
+--
+-- Host: localhost    Database: example
+-- ------------------------------------------------------
+-- Server version       8.0.23
+
+C:\Users\Ксения>mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 26
+Server version: 8.0.23 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE sample;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> exit
+Bye
+
+C:\Users\Ксения>mysql sample < example.sql
+
+C:\Users\Ксения>mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 28
+Server version: 8.0.23 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> USE sample;
+Database changed
+mysql> SHOW TABLES;
++------------------+
+| Tables_in_sample |
++------------------+
+| users            |
++------------------+
+1 row in set (0.01 sec)
+
+mysql> exit
+Bye
+4. Ознакомьтесь более подробно с документацией утилиты mysqldump. Создайте дамп единственной таблицы help_keyword базы данных mysql.
+Причем добейтесь того, чтобы дамп содержал только первые 100 строк таблицы:
+
+C:\Users\Ксения>mysqldump mysql help_keyword --where="TRUE ORDER BY help_keyword_id LIMIT 100" > help_keyword_dump.sql
+
